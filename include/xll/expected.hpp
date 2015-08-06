@@ -29,6 +29,19 @@ unexpected<T> make_unexpected(T&& value)
 }
 
 template <typename T, typename E>
+class expected;
+
+template <typename T>
+struct expected_traits;
+
+template <typename T, typename E>
+struct expected_traits<expected<T, E>>
+{
+  using success_type = T;
+  using error_type = E;
+};
+
+template <typename T, typename E>
 class expected
 {
 public:
@@ -69,6 +82,31 @@ public:
     const error_type* value = _value.template target<error_type>();
     assert(value);
     return value->v;
+  }
+
+  template <typename F>
+  auto map(F&& func) -> expected<decltype(func(std::declval<T>())), E>
+  {
+    if (*this)
+      return {func(**this)};
+    else
+      return {unexpect, error()};
+  }
+
+  template <typename F,
+      typename V = typename std::enable_if<
+          std::is_same<typename expected_traits<decltype(
+                           std::declval<F>()(std::declval<T>()))>::error_type,
+              E>::value>::type>
+  auto bind(F&& func)
+      -> expected<typename expected_traits<decltype(
+                      std::declval<F>()(std::declval<T>()))>::success_type,
+          E>
+  {
+    if (*this)
+      return func(**this);
+    else
+      return {unexpect, error()};
   }
 
   explicit operator bool() const noexcept
