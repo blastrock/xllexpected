@@ -54,19 +54,19 @@ public:
 
   template <typename T2>
   expected(T2&& v)
-    : _value(success_type{std::forward<T2>(v)})
+    : _value(success_type{T(std::forward<T2>(v))})
   {
   }
 
   template <typename T2>
   expected(unexpected<T2> v)
-    : _value(error_type{std::move(v.value)})
+    : _value(error_type{E(std::move(v.value))})
   {
   }
 
   template <typename T2>
   expected(unexpect_t(*)(), T2&& v)
-    : _value(error_type{std::forward<T2>(v)})
+    : _value(error_type{E(std::forward<T2>(v))})
   {
   }
 
