@@ -70,9 +70,16 @@ public:
   {
   }
 
-  T operator*() const noexcept
+  const T& operator*() const noexcept
   {
     const success_type* value = _value.template target<success_type>();
+    assert(value);
+    return value->v;
+  }
+
+  T& operator*() noexcept
+  {
+    success_type* value = _value.template target<success_type>();
     assert(value);
     return value->v;
   }
