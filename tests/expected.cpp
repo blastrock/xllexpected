@@ -127,6 +127,13 @@ TEST_CASE("expected with error")
     CHECK(16 == exp2.error());
   }
 
+  SECTION("get_unexpected")
+  {
+    expected<int, int> exp2 = exp.get_unexpected();
+    REQUIRE_FALSE(exp2);
+    CHECK(16 == exp2.error());
+  }
+
   SECTION("map")
   {
     expected<long, int> exp2 = exp.map(

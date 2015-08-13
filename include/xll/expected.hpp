@@ -91,6 +91,11 @@ public:
     return value->v;
   }
 
+  unexpected<E> get_unexpected()
+  {
+    return unexpected<E>{ error() };
+  }
+
   template <typename F>
   auto map(F&& func) -> expected<decltype(func(std::declval<T>())), E>
   {
