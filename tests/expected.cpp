@@ -5,6 +5,13 @@
 
 using namespace xll;
 
+TEST_CASE("expected with default initialization")
+{
+  expected<double, int> exp;
+  REQUIRE(!exp);
+  CHECK(0 == exp.error());
+}
+
 TEST_CASE("expected with value creation")
 {
   {

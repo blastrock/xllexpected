@@ -45,6 +45,11 @@ template <typename T, typename E>
 class expected
 {
 public:
+  expected()
+    : expected(make_unexpected(E{}))
+  {
+  }
+
   expected(expected&) = default;
   expected(expected&&) = default;
 
